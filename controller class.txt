@@ -1,0 +1,98 @@
+package com.controller;
+
+import java.sql.ClientInfoStatus;
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.pojo.SampleDetails;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+
+public class SampleData {
+
+	
+	public static void main(String[] args) throws ClassNotFoundException{
+		
+		Client client = Client.create();
+		
+		String id="2";
+		WebResource webResource=client.resource("https://reqres.in/api/users?page="+id);
+		
+		System.out.println(id);
+		ClientResponse response =webResource.accept("application/json").get(ClientResponse.class);
+
+	
+		if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ response.getStatus());
+			
+		}
+		if (response.hasEntity()) {
+			try {
+				String message = String.valueOf(response
+						.getEntity(String.class));
+
+			System.out.println(message);
+			
+			
+			
+			Gson gson = new Gson();
+			// System.out.println("the list -s "+gson);
+
+			List<SampleDetails> list = gson.fromJson(message,
+					new TypeToken<List<SampleDetails>>() {
+					}.getType());
+
+			
+	//	return list.indexOf(Collections.min(list));
+			
+			
+			//list.stream().min(Comparator.comparing(SampleDetails::getId)).orElseThrow(NoSuchElementException);
+			for (SampleDetails c : list) {
+				
+				
+				System.out.println(c.getId());
+				
+				System.out.println(c.getAvatar());
+				System.out.println(c.getFirst_name());
+				System.out.println(c.getLast_name());
+				
+				System.out.println(c.getTotal_pages());
+				
+				
+				
+			}
+			}
+			
+			catch (RuntimeException e) {
+				e.printStackTrace();
+			}
+	
+	
+	}
+	}
+	
+	
+	}
+
+
+
+/*	List<Integer>list =new ArrayList<Integer>();
+
+list.add(1);
+
+list.add(3);
+System.out.println("max::" +findMin(list));
+		
+
+}
+
+private static String findMin(List<Integer> list) {
+// TODO Auto-generated method stub
+return;
+}
+*/
